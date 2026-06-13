@@ -8,9 +8,22 @@
                 <router-link class="layout__link" to="/">
                     Inicio
                 </router-link>
-                <router-link class="layout__link" to="/login">
-                    Acceso
-                </router-link>
+                <template v-if="auth.token">
+                    <router-link class="layout__link" to="/patients">
+                        Pacientes
+                    </router-link>
+                    <span class="layout__user text-zinc-500 text-sm">
+                        {{ auth.user?.name || 'Usuario' }} ({{ auth.tenantId }})
+                    </span>
+                    <button @click="handleLogout" class="layout__logout">
+                        Salir
+                    </button>
+                </template>
+                <template v-else>
+                    <router-link class="layout__link" to="/login">
+                        Acceso
+                    </router-link>
+                </template>
             </nav>
         </header>
         <main class="layout__main">
@@ -20,6 +33,16 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+
+const auth = useAuthStore();
+const router = useRouter();
+
+async function handleLogout() {
+    await auth.logout();
+    router.push({ name: 'login' });
+}
 </script>
 
 <style scoped>
@@ -48,6 +71,7 @@
 .layout__nav {
     display: flex;
     gap: 1rem;
+    align-items: center;
 }
 
 .layout__link {
@@ -58,6 +82,32 @@
 
 .layout__link.router-link-active {
     color: #2563eb;
+}
+
+.layout__user {
+    font-size: 0.85rem;
+    background: #f1f5f9;
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.layout__logout {
+    background: none;
+    border: none;
+    color: #dc2626;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.layout__logout:hover {
+    background: #fef2f2;
 }
 
 .layout__main {

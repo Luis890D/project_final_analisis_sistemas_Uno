@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '@/pages/HomePage.vue';
 import LoginPage from '@/modules/auth/pages/LoginPage.vue';
+import PatientListPage from '@/modules/patients/pages/PatientListPage.vue';
+import PatientDetailPage from '@/modules/patients/pages/PatientDetailPage.vue';
 import { authGuard } from '@/router/guards';
 
 const router = createRouter({
@@ -16,6 +18,18 @@ const router = createRouter({
             name: 'login',
             component: LoginPage,
             meta: { guest: true },
+        },
+        {
+            path: '/patients',
+            name: 'patients',
+            component: PatientListPage,
+            meta: { requiresAuth: true },
+        },
+        {
+            path: '/patients/:id',
+            name: 'patient-detail',
+            component: PatientDetailPage,
+            meta: { requiresAuth: true },
         },
     ],
 });
