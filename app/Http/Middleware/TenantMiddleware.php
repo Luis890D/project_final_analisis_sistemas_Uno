@@ -20,7 +20,10 @@ class TenantMiddleware
         }
 
         /** @var Tenant|null $tenant */
-        $tenant = Tenant::query()->find($tenantId);
+        $tenant = Tenant::query()
+            ->where('id', $tenantId)
+            ->orWhere('slug', $tenantId)
+            ->first();
 
         if ($tenant === null) {
             return response()->json([

@@ -53,6 +53,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
     }
 
+    public function patient(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Patient::class, 'user_id', 'id');
+    }
+
     public function getJWTIdentifier(): mixed
     {
         return $this->getKey();
